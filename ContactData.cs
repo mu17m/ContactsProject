@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -52,7 +52,7 @@ namespace ContactsDataAccessLayer
 
         public static int AddNewContact(string FirstName, string LastName, string Email, string Phone,string Address, DateTime DateOfBirth,int CountryID,string ImagePath)
             {
-            int ID = -1;
+            int ContactID = -1;
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
             string query = @"Insert into Contacts(FirstName, LastName, Email, Phone, Address, DateOfBirth, ImagePath)" +
                            "Values (@FirstName, @LastName, @Email, @Phone, @Address, @DateOfBirth, @CountryID, @ImagePath)" +
@@ -78,20 +78,22 @@ namespace ContactsDataAccessLayer
             {
                 connection.Open();
                 object Result = command.ExecuteScalar();
-                connection.Close();
-                if (Result != null && int.TryParse(Result.ToString(), out int ID) 
-                    {
-
-                    }
+                if (Result != null && int.TryParse(Result.ToString(), out int InsertedID))
+                {
+                    ContactID = InsertedID;
+                };
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);   
+                //Console.WriteLine(ex.Message);
             }
-            finally 
-            { 
-                connection.Close(); 
+            finally
+            {
+                connection.Close();
             }
-            
+            return ContactID;
             }
+
     }
+
 }
