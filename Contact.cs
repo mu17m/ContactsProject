@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Diagnostics.SymbolStore;
 using ContactsDataAccessLayer;
@@ -30,6 +30,7 @@ namespace ContactsBusinessLayer
             this.DateOfBirth = DateTime.Now;
             this.CountryID = -1;
             this.ImagePath = "";
+            Mode = enMode.AddNew;
         }
         private clsContact(int Id, string FirstName, string LastName, string Email, string Phone, string Address, DateTime DateOfBirth, int CountryID, string ImagePath)
         {
@@ -44,10 +45,30 @@ namespace ContactsBusinessLayer
             this.ImagePath = ImagePath;
             Mode = enMode.Update;
         }
-        
-        public bool Save()
+        private bool _AddNewContact()
         {
 
+            this.ID = clsContactDataAccess.AddNewContact(this.FirstName, this.LastName, this.Email, this.Phone, this.Address, this.DateOfBirth, this.CountryID, this.ImagePath);
+            return (this.ID != -1);
+        }
+        public bool Save()
+        {
+            switch (Mode)
+            {
+                case enMode.AddNew:
+                    if(_AddNewContact())
+                    {
+                        Mode = enMode.Update; 
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
+                case enMode.Update:
+                    return false;
+            }
         }
         public static clsContact Find(int id)
             {
