@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using ContactsBusinessLayer;
 
@@ -40,14 +40,78 @@ namespace ContactsProject
             contact1.CountryID = 2;
             contact1.ImagePath = "";
 
-            if(contact1.Save())
+            if (contact1.Save())
             {
                 Console.WriteLine("Success");
+                Console.ReadLine();
             }
+            else Console.WriteLine("Fail");
+            Console.ReadLine();
+        }
+
+        static void TestUpdateContact(int ContactID)
+        {
+            clsContact contact1 = clsContact.Find(ContactID);
+            if (contact1 != null) 
+            { 
+            contact1.FirstName = "Mmm";
+            contact1.LastName = "bbb";
+            contact1.Email = "ss@gmail.com";
+            contact1.Phone = "07888";
+            contact1.Address = "Mo-alfff";
+            contact1.DateOfBirth = DateTime.Now;
+            contact1.CountryID= 2;
+            contact1.ImagePath = "";
+            }
+            if (contact1.Save())
+            {
+                Console.WriteLine("Success!");
+                Console.ReadLine();
+            }
+            else Console.WriteLine("Fail");
+            Console.ReadLine();
+        }
+
+        static void TestDeleteContact(int ContactID)
+        {
+            if(clsContact.IsContactExist(ContactID))
+            {
+
+                if (clsContact.DeleteContact(ContactID))
+                {
+                    Console.WriteLine("Success!");
+                    Console.ReadLine();
+                }
+                else Console.WriteLine("Fail to delete");
+            }
+            else Console.WriteLine("Contact With ID" + ContactID + "Not Found");
+            Console.ReadLine();
+        }
+
+        static void ListContacts()
+        {
+            DataTable dt = clsContact.GetAllContacts();
+            Console.WriteLine("Coontacts Data: ");
+            foreach(DataRow row in dt.Rows)
+            {
+                Console.WriteLine($"{row["ContactID"]}, {row["FirstName"]}, {row["lastName"]}");
+            }
+            Console.ReadLine();
+        }
+
+        static void IsContactExist(int ContactID)
+        {
+
+            if (clsContact.IsContactExist(ContactID))
+            {
+                Console.WriteLine("Exist!");
+            }
+            else Console.WriteLine("NOT Found");
+            Console.ReadLine();
         }
         static void Main(string[] args)
         {
-            TestAddNew();
+            IsContactExist(2);
         }
     }
 }
