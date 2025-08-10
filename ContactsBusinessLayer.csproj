@@ -45,7 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ContactsDataAccessLayer\ContactsDataAccessLayer.csproj">
+    <ProjectReference Include="ContactsDataAccessLayer.csproj">
       <Project>{d53a71fa-3daa-43ea-a07b-8969862e1384}</Project>
       <Name>ContactsDataAccessLayer</Name>
     </ProjectReference>

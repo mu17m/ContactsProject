@@ -1,12 +1,13 @@
 using System;
 using System.Data;
 using System.Diagnostics.SymbolStore;
-using ContactsDataAccessLayer;
+using ContactsDataAccessLayer.ContactData;
 
 namespace ContactsBusinessLayer
 {
     public class clsContact
     {
+        #region Model properties
         public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -16,9 +17,11 @@ namespace ContactsBusinessLayer
         public DateTime DateOfBirth { get; set; }
         public int CountryID { get; set; }
         public string ImagePath { get; set; }
-
         enum enMode { AddNew = 1, Update = 2 };
         enMode Mode;
+        #endregion
+
+        #region Constructors
         public clsContact()
         {
             this.ID = -1;
@@ -45,13 +48,15 @@ namespace ContactsBusinessLayer
             this.ImagePath = ImagePath;
             Mode = enMode.Update;
         }
+        #endregion
+
+        #region Methods
         private bool _AddNewContact()
         {
 
             this.ID = clsContactDataAccess.AddNewContact(this.FirstName, this.LastName, this.Email, this.Phone, this.Address, this.DateOfBirth, this.CountryID, this.ImagePath);
             return (this.ID != -1);
         }
-
         private bool _UpdateContact() 
         {
             Mode = enMode.Update;
@@ -89,24 +94,18 @@ namespace ContactsBusinessLayer
                 return null;
             }
         }
-
         public static bool DeleteContact(int ContactID)
         {
             return clsContactDataAccess.DeleteContact(ContactID);
         }
-
         public static DataTable GetAllContacts()
         {
             return clsContactDataAccess.GetAllContacts();
         }
-
         public static bool IsContactExist(int ContactID) 
         {
             return clsContactDataAccess.IsContactExist(ContactID);
         }
-
-
-
+        #endregion
     }
-
 }

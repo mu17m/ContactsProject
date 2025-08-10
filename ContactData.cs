@@ -1,56 +1,12 @@
-using ContactData;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using ContactsDataAccessLayer.DataAccessSettings;
 
-namespace ContactsDataAccessLayer
+namespace ContactsDataAccessLayer.ContactData
 {
     public class clsContactDataAccess
     {
-        public static bool GetContactInfoByID(int id, ref string FirstName, ref string LastName, ref string Email, ref string Phone, ref string Address, ref DateTime BirthDate, ref int CountryID, ref string ImagePath)
-        {
-            bool IsFound = false;
-            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-            string query = "SELECT * FROM Contacts WHERE ContactID = @ContactID";
-            SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@ContactID", id);
-
-            try
-            {
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
-                {
-                    IsFound = true;
-                    FirstName = (string)reader["FirstName"];
-                    LastName = (string)reader["LastName"];
-                    Email = (string)reader["Email"];
-                    Phone = (string)reader["Phone"];
-                    Address = (string)reader["Address"];
-                    BirthDate = (DateTime)reader["DateOfBirth"];
-                    CountryID = (int)reader["CountryID"];
-                    ImagePath = (string)reader["ImagePath"].ToString();
-                }
-                else
-                {
-                    IsFound = false;
-                }
-
-                reader.Close();
-            }
-            catch 
-            {
-                //Console.WriteLine(ex.Message);
-                IsFound = false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-            return IsFound;
-        }
-
         public static int AddNewContact(string FirstName, string LastName, string Email, string Phone, string Address, DateTime DateOfBirth, int CountryID, string ImagePath)
         {
             int ContactID = -1;
@@ -94,7 +50,6 @@ namespace ContactsDataAccessLayer
             }
             return ContactID;
         }
-
         public static bool UpdateContact(int ContactID, string FirstName, string LastName, string Email, string Phone, string Address, DateTime DateOfBirth, int CountryID, string ImagePath)
         {
             bool IsDone = false;
@@ -132,30 +87,49 @@ namespace ContactsDataAccessLayer
             return IsDone;
 
         }
-
-        public static bool DeleteContact(int ContactID) 
+        public static bool GetContactInfoByID(int id, ref string FirstName, ref string LastName, ref string Email, ref string Phone, ref string Address, ref DateTime BirthDate, ref int CountryID, ref string ImagePath)
         {
-            int rowEffect;
+            bool IsFound = false;
             SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
-            string query = "Delete from Contacts where ContactID = @ContactID;";
+            string query = "SELECT * FROM Contacts WHERE ContactID = @ContactID";
             SqlCommand command = new SqlCommand(query, connection);
-            command.Parameters.AddWithValue("@ContactID", ContactID);
+            command.Parameters.AddWithValue("@ContactID", id);
+
             try
             {
                 connection.Open();
-                rowEffect = command.ExecuteNonQuery();
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    IsFound = true;
+                    FirstName = (string)reader["FirstName"];
+                    LastName = (string)reader["LastName"];
+                    Email = (string)reader["Email"];
+                    Phone = (string)reader["Phone"];
+                    Address = (string)reader["Address"];
+                    BirthDate = (DateTime)reader["DateOfBirth"];
+                    CountryID = (int)reader["CountryID"];
+                    ImagePath = (string)reader["ImagePath"].ToString();
+                }
+                else
+                {
+                    IsFound = false;
+                }
+
+                reader.Close();
             }
-            catch            
+            catch 
             {
-                return false;
+                //Console.WriteLine(ex.Message);
+                IsFound = false;
             }
             finally
             {
                 connection.Close();
             }
-            return (rowEffect > 0);
+            return IsFound;
         }
-
         public static DataTable GetAllContacts()
         {
             DataTable dt = new DataTable();
@@ -182,7 +156,28 @@ namespace ContactsDataAccessLayer
             }
             return dt;
         }
-
+        public static bool DeleteContact(int ContactID) 
+        {
+            int rowEffect;
+            SqlConnection connection = new SqlConnection(clsDataAccessSettings.ConnectionString);
+            string query = "Delete from Contacts where ContactID = @ContactID;";
+            SqlCommand command = new SqlCommand(query, connection);
+            command.Parameters.AddWithValue("@ContactID", ContactID);
+            try
+            {
+                connection.Open();
+                rowEffect = command.ExecuteNonQuery();
+            }
+            catch            
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return (rowEffect > 0);
+        }
         public static bool IsContactExist(int ContactID)
         {
             bool IsFound = false;
@@ -206,7 +201,6 @@ namespace ContactsDataAccessLayer
             }
             return IsFound;
         }
-
     }
 
 }

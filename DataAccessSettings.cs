@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace ContactsDataAccessLayer
+namespace ContactsDataAccessLayer.DataAccessSettings
 {
     public static class clsDataAccessSettings
     {
-        public static string ConnectionString = "Server=.;Database=ContacsDB;User Id=sa;Password=sa123456;"; 
+        public static string ConnectionString = "Server=.;Database=ContactsDB;User Id=sa;Password=sa123456;"; 
     }
 }

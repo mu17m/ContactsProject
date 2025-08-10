@@ -109,7 +109,7 @@ namespace ContactsProject
             else Console.WriteLine("NOT Found");
             Console.ReadLine();
         }
-        static void Main(string[] args)
+        static void Main()
         {
             IsContactExist(2);
         }
